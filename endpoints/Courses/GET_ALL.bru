@@ -1,0 +1,17 @@
+meta {
+  name: GET_ALL
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{http}}://{{host}}/courses
+  body: none
+  auth: none
+}
+
+query {
+  ~limit: 1
+  ~page: 2
+  ~name: Lalo
+}

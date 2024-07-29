@@ -1,0 +1,19 @@
+meta {
+  name: POST
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{http}}://{{host}}/courses
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Curso de go",
+    "start_date": "2024-08-12",
+    "end_date": "2024-09-12"
+  }
+}

@@ -1,0 +1,18 @@
+meta {
+  name: UPDATE
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{http}}://{{host}}/courses/e948fd26-df82-4cff-9fae-2889e728394d
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Curso de python",
+    "start_date": "2024-08-13"
+  }
+}
