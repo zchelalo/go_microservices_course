@@ -41,13 +41,13 @@ func (srv *service) Create(ctx context.Context, name, startDate, endDate string)
 	startDateParsed, err := time.Parse("2006-01-02", startDate)
 	if err != nil {
 		srv.log.Println(err)
-		return nil, err
+		return nil, ErrInvalidStartDate
 	}
 
 	endDateParsed, err := time.Parse("2006-01-02", endDate)
 	if err != nil {
 		srv.log.Println(err)
-		return nil, err
+		return nil, ErrInvalidEndDate
 	}
 
 	course := domain.Course{
@@ -87,7 +87,7 @@ func (srv *service) Update(ctx context.Context, id string, name *string, startDa
 		parsed, err := time.Parse("2006-01-02", *startDate)
 		if err != nil {
 			srv.log.Println(err)
-			return err
+			return ErrInvalidStartDate
 		}
 		startDateParsed = &parsed
 	}
@@ -97,7 +97,7 @@ func (srv *service) Update(ctx context.Context, id string, name *string, startDa
 		parsed, err := time.Parse("2006-01-02", *endDate)
 		if err != nil {
 			srv.log.Println(err)
-			return err
+			return ErrInvalidEndDate
 		}
 		endDateParsed = &parsed
 	}
