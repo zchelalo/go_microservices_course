@@ -50,6 +50,11 @@ func (srv *service) Create(ctx context.Context, name, startDate, endDate string)
 		return nil, ErrInvalidEndDate
 	}
 
+	if startDateParsed.After(endDateParsed) {
+		srv.log.Println(ErrEndLesserStart)
+		return nil, ErrEndLesserStart
+	}
+
 	course := domain.Course{
 		Name:      name,
 		StartDate: startDateParsed,
@@ -82,6 +87,11 @@ func (srv *service) Get(ctx context.Context, id string) (*domain.Course, error) 
 func (srv *service) Update(ctx context.Context, id string, name *string, startDate, endDate *string) error {
 	srv.log.Println("update course service")
 
+	course, err := srv.repository.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
 	var startDateParsed *time.Time
 	if startDate != nil {
 		parsed, err := time.Parse("2006-01-02", *startDate)
@@ -89,6 +99,7 @@ func (srv *service) Update(ctx context.Context, id string, name *string, startDa
 			srv.log.Println(err)
 			return ErrInvalidStartDate
 		}
+
 		startDateParsed = &parsed
 	}
 
@@ -99,7 +110,26 @@ func (srv *service) Update(ctx context.Context, id string, name *string, startDa
 			srv.log.Println(err)
 			return ErrInvalidEndDate
 		}
+
 		endDateParsed = &parsed
+	}
+
+	var start, end time.Time
+	if startDateParsed != nil {
+		start = *startDateParsed
+	} else {
+		start = course.StartDate
+	}
+
+	if endDateParsed != nil {
+		end = *endDateParsed
+	} else {
+		end = course.EndDate
+	}
+
+	if start.After(end) {
+		srv.log.Println(ErrEndLesserStart)
+		return ErrEndLesserStart
 	}
 
 	return srv.repository.Update(ctx, id, name, startDateParsed, endDateParsed)
